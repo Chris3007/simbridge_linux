@@ -1,3 +1,6 @@
+> [!NOTE]
+> This project is a fork from the official SimBridge. This removes terrain rendering and the tray icon, so it can be build on Linux. For Windows, please use the [offical SimBridge](https://github.com/flybywiresim/simbridge).
+
 ![FlyByWire Simulations](https://raw.githubusercontent.com/flybywiresim/branding/1391fc003d8b5d439d01ad86e2778ae0bfc8b682/tails-with-text/FBW-Color-Light.svg#gh-dark-mode-only)
 ![FlyByWire Simulations](https://github.com/flybywiresim/branding/blob/master/tails-with-text/FBW-Color-Dark.svg#gh-light-mode-only)
 
