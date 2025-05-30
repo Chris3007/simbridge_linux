@@ -6,12 +6,15 @@
   "private": false,
   "license": "GPL-3.0-only",
   "os": [
-    "win32"
+    "win32",
+    "linux"
   ],
   "engines": {
     "node": "18.x.x"
   },
   "scripts": {
+    "prepare": "node ./patch-gl.js",
+    "prebuild-install": "sed -i '21i#include <cstdint>' node_modules/gl/deps/angle/src/common/angleutils.h && cd node_modules/gl && CXX=g++ CXXFLAGS='-std=c++17' npx node-gyp rebuild || true",
     "prepub": "copy package.json dist && copy README.md dist && copy LICENSE dist && copy CODE_OF_CONDUCT.md dist",
     "pub": "cd dist && npm publish",
     "postpub": "cd dist && del package.json && del README.md && del LICENSE && del CODE_OF_CONDUCT.md",
@@ -24,11 +27,10 @@
     "install:exec": "node doExe.mjs && npm run copy:deps && npm run build:package",
     "copy:deps": "npm run copy:resources && npm run copy:modules && copyfiles -s -f LICENSE build && npm run fetch:terrain",
     "copy:resources": "copyfiles -s -f apps/server/src/config/properties.json ./node_modules/pdf-to-printer/dist/*.exe build/resources && renamer -f \"/Sumatra.*/i\" -r SumatraPDF.exe build/resources/*",
-    "copy:modules": "npm run copy:pdfjs && npm run copy:nodehide && npm run copy:sharp && npm run copy:open",
+    "copy:modules": "npm run copy:pdfjs && npm run copy:sharp && npm run copy:open",
     "copy:pdfjs": "copyfiles -s -f \"node_modules/pdfjs-dist/build/**/*.*\" build/node_modules/pdfjs-dist/build && npm run copy:pdfjs:fonts && npm run copy:pdfjs:cmaps",
     "copy:pdfjs:fonts": "copyfiles -s -f \"node_modules/pdfjs-dist/standard_fonts/**/*.*\" build/node_modules/pdfjs-dist/standard_fonts",
     "copy:pdfjs:cmaps": "copyfiles -s -f \"node_modules/pdfjs-dist/cmaps/**/*.*\" build/node_modules/pdfjs-dist/cmaps",
-    "copy:nodehide": "copyfiles -s -f \"node_modules/node-hide-console-window/build/Release/**/*\" build/node_modules/node-hide-console-window/build/Release",
     "copy:sharp": "copyfiles -s -f \"node_modules/sharp/build/Release/**/*\" build/node_modules/sharp/build/Release",
     "copy:open": "copyfiles -s -f \"node_modules/open/xdg-open\"  build/node_modules/open",
     "fetch:terrain": "node scripts/terrain.js",
@@ -65,12 +67,12 @@
     "class-validator": "^0.14.1",
     "copyfiles": "^2.4.1",
     "dns-packet": "^5.4.0",
+    "gl": "^8.1.6",
     "gpu.js": "^2.16.0",
     "ip": "^1.1.5",
     "mime-types": "^2.1.34",
     "multicast-dns": "^7.2.5",
     "nest-winston": "^1.9.7",
-    "node-hide-console-window": "^2.2.0",
     "open": "^8.4.0",
     "pdf-to-printer": "5.3.0",
     "pdfjs-dist": "^2.13.216",
@@ -185,7 +187,8 @@
   },
   "pkg": {
     "targets": [
-      "node18-win-x64"
+      "node18-win-x64",
+      "linux"
     ],
     "assets": [
       "node_modules/linebreak/src/classes.trie",

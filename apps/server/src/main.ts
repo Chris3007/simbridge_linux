@@ -7,7 +7,6 @@ import { WsAdapter } from '@nestjs/platform-ws';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { platform } from 'os';
-import { hideConsole } from 'node-hide-console-window';
 import * as path from 'path';
 import { getSimbridgeDir } from 'apps/server/src/utilities/pathUtil';
 import { ShutDownService } from './utilities/shutdown.service';
@@ -59,7 +58,7 @@ async function bootstrap() {
   );
 
   if (platform() === 'win32' && isConsoleHidden) {
-    hideConsole();
+    //hideConsole();
   }
 
   if (module.hot) {
